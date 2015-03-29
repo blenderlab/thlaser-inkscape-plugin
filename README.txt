@@ -1,11 +1,11 @@
 THLaser Inkscape Plugin
 -----------------------
 
-This program is an Inkscape extension for exporting a set of paths as 
-gcode script. It is primarily used by members to the think|haus hacker
-space (thinkhaus.org) for use with their laser cutter. As such it is
-customized to suit our needs and so may not be your best choice if you
-are looking for a general purpose Inkscape to gcode script.
+This program is an Inkscape extension for exporting a set of paths and
+bitmap images as gcode script as supported by this marlin fork:
+https://github.com/emente/buildlog-lasercutter-marlin
+
+This script is a fork of the think|haous hacker space plugin.
 
 This script is a fork of Gcodetools v1.2 written by Nick Drobchenko and
 is released under the same license (GPL v2).
