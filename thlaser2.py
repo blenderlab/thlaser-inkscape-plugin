@@ -466,6 +466,8 @@ class Gcode_tools(inkex.Effect):
         self.OptionParser.add_option("-m", "--movefeed",                    action="store", type="float",         dest="movefeed", default="6000",                        help="Movement feed rate in unit/min")
         self.OptionParser.add_option("-b", "--bitmapfeed",                    action="store", type="float",         dest="bitmapfeed", default="1000",                        help="Bitmap feed rate in unit/min")
 
+        self.OptionParser.add_option("", "--pixelspermm",                    action="store", type="int",         dest="pixelspermm", default="10",                    help="Pixels per mm")    
+        
         self.OptionParser.add_option("",   "--biarc-tolerance",            action="store", type="float",         dest="biarc_tolerance", default="1",        help="Tolerance used when calculating biarc interpolation.")                
         self.OptionParser.add_option("",   "--biarc-max-split-depth",    action="store", type="int",         dest="biarc_max_split_depth", default="4",        help="Defines maximum depth of splitting while approximating using biarcs.")                
 
@@ -756,7 +758,7 @@ class Gcode_tools(inkex.Effect):
                 draw_svg_rect(x,y-poop,w,h,self.document.getroot())
                 
                 #gcode += ";image at %f/%f mm, size %f/%f id %s\n" % (x* self.unitScale,y* self.unitScale,w* self.unitScale,h* self.unitScale, node.get('id'))
-                gcode += "G0 " + self.make_args([x,y-poop],"G0") + " F" + str(int(self.options.movefeed)) + "\nG0 F"+ str(int(self.options.bitmapfeed)) +"\n"
+                gcode += "G0 " + self.make_args([x,y-poop],"G0") + " F" + str(int(self.options.movefeed)) + "\nG7 R"+ str(self.options.pixelspermm) +" F"+ str(int(self.options.bitmapfeed)) +"\n"
 
                 imgstr = re.search(r'base64,(.*)', datauri).group(1)
                 tempimg = cStringIO.StringIO(imgstr.decode('base64'))
@@ -766,11 +768,11 @@ class Gcode_tools(inkex.Effect):
                 image = ImageOps.invert(image)
                 image = ImageOps.flip(image)
                 
-                scalew = int(round(w * self.pixelsPerMM * self.unitScale));
-                scaleh = int(round(h * self.pixelsPerMM * self.unitScale));
+                scalew = int(round(w * self.options.pixelspermm * self.unitScale));
+                scaleh = int(round(h * self.options.pixelspermm * self.unitScale));
                 
                 if (scalew != width or scaleh != height):
-                    gcode += ";resize %d/%d to %d/%d (%f ppm, %f/%f mm)\n" % (width, height, scalew, scaleh, self.pixelsPerMM, w* self.unitScale,h* self.unitScale)
+                    gcode += ";resize %d/%d to %d/%d (%f/%f mm)\n" % (width, height, scalew, scaleh, w* self.unitScale,h* self.unitScale)
                     image = image.resize((scalew,scaleh))
 
                 width, height = image.size
@@ -974,8 +976,7 @@ class Gcode_tools(inkex.Effect):
 
         gcode += ";Workarea %f/%f mm\n" % (self.pageWidth, self.pageHeight)
         
-        self.pixelsPerMM = 10;
-        gcode += ";%d pixels per mm\n" % (self.pixelsPerMM)
+        gcode += ";%d pixels per mm\n" % (self.options.pixelspermm)
         
         self.unitScale = 0.282222
         gcode += "G21 ;(All units in mm)\n"

@@ -35,6 +35,7 @@ Updated for marlin-th fork (for raster mode) by mnt@codeninja.de</_param>
  			<param name="airfan" type="boolean" _gui-text="Turn on fan while cutting">true</param>
             <param name="logging" type="boolean" _gui-text="Log debug output from plugin:">true</param>
 			<param name="mirrory" type="boolean" _gui-text="Mirror y axis">true</param>
+			<param name="pixelspermm" type="int" min="1" max="100" _gui-text="Pixels per mm">10</param>
 		</page>
 
         <page name='tab' _gui-text='Vector'>
