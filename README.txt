@@ -13,7 +13,10 @@ is released under the same license (GPL v2).
 Installation
 ------------
 
-Copy the files thlaser.py and thlaser.inx into your Inkscape extensions
+Install Python Image Library: 
+http://www.pythonware.com/products/pil/
+
+Copy the files thlaser2.py and thlaser2.inx into your Inkscape extensions
 folder. Fire up inkscape and you will find the plugin under Extensions ->
 Export -> THLaser GCode Export.
 
