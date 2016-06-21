@@ -6,7 +6,7 @@
     <effect>
         <object-type>path</object-type>
         <effects-menu>
-            <submenu _name="Export"/>
+            <submenu _name="Laser"/>
         </effects-menu>
     </effect>
 
@@ -26,16 +26,48 @@ This script is a fork of Gcodetools v1.2 by Nick Drobchenko. It is currently mai
 Updated for marlin-th fork (for raster mode) by mnt@codeninja.de</_param>
         </page>
 
-        <page name='tab' _gui-text='Advanced'>
-            <param name="Xoffset" type="float" precision="4" min="-1000" max="1000" _gui-text="Offset in mm along X axis">0.0</param>
-            <param name="Yoffset" type="float" precision="4" min="-1000" max="1000" _gui-text="Offset in mm along Y axis">0.0</param>
-            <param name="double_sided_cutting" type="boolean" _gui-text="Double-sided cutting:">false</param>
-            <param name="usespindle" type="boolean" _gui-text="Use M3/M5 for laser">false</param>
+        <page name='tab' _gui-text='Machine'>
+			<param name="mirrory" type="boolean" _gui-text="Mirror y axis">true</param>
+            <param name="usespindle" type="boolean" _gui-text="Use M3/M5 for laser">true</param>
+			<param name="movefeed" type="int" min="10" max="29000" _gui-text="Movement feed rate (mm/min):">5000</param>
 			<param name="homing" type="boolean" _gui-text="Home XY on start">false</param>
  			<param name="airfan" type="boolean" _gui-text="Turn on fan while cutting">true</param>
-            <param name="logging" type="boolean" _gui-text="Log debug output from plugin:">true</param>
-			<param name="mirrory" type="boolean" _gui-text="Mirror y axis">true</param>
-			<param name="pixelspermm" type="int" min="1" max="100" _gui-text="Pixels per mm">10</param>
+            <param name="logging" type="boolean" _gui-text="Write debug log">true</param>
+		</page>
+		
+        <page name='tab' _gui-text='Modifications'>
+            <param name="Xoffset" type="float" precision="4" min="-1000" max="1000" _gui-text="Offset in mm along X axis">0.0</param>
+            <param name="Yoffset" type="float" precision="4" min="-1000" max="1000" _gui-text="Offset in mm along Y axis">0.0</param>
+            <param name="double_sided_cutting" type="boolean" _gui-text="Double-sided cutting">false</param>
+		</page>
+
+		<page name='tab' _gui-text='Bitmap'>
+			<param name="bitmap_mode" type="enum" gui-text="Output generation">
+				<_item value="0">Brightness = On...Off</_item>
+				<_item value="1">Brightness = Band converted On...Off</_item>
+				<_item value="2">Black/White = On/Off, no dither</_item>
+				<_item value="3">Black White = On/Off, Floyd Steinberg</_item>
+				<_item value="4">Black/White = RandomOn/Off</_item>
+				<_item value="5">Black/White = On/RandomOff</_item>
+			</param>
+
+			<param name="modulation_type" type="enum" gui-text="Output type">
+				<_item value="1">PWM Greyscale</_item>
+				<_item value="2">PPM Pulsed</_item>
+			</param>
+			
+			<param name="scale_type" type="enum" gui-text="Size Interpolation">
+				<_item value="1">Nearest</_item>
+				<_item value="2">Bilinear</_item>
+				<_item value="3">Bicubic</_item>
+				<_item value="4">Antialias</_item>
+			</param>
+			<param name="bw_threshold" type="int" min="1" max="254" gui-text="B/W threshold">128</param>
+			<param name="pixelspermm" type="int" min="1" max="200" _gui-text="Pixels per mm">10</param>
+			<param name="b_threshold" type="int" min="0" max="255" gui-text="PWM Band Start (End of Black)">210</param>
+			<param name="w_threshold" type="int" min="0" max="255" gui-text="PWM Band End (End of White)">220</param>
+		
+			<param name="outputpng" type="boolean" _gui-text="Output preview/debugging png">false</param>
 		</page>
 
         <page name='tab' _gui-text='Vector'>
@@ -43,18 +75,17 @@ Updated for marlin-th fork (for raster mode) by mnt@codeninja.de</_param>
             <_param name="help" type="description">Biarc interpolation tolerance is the maximum allowed distance between a path and it's approximation. If this value is exceeded, the path will be split into two segments.</_param>
             <param name="biarc-max-split-depth" type="int" _gui-text="Maximum splitting depth">4</param>
             <param name="min-arc-radius" type="float" precision="5" min="-1000" max="1000"  _gui-text="Minimum arc radius">0.05</param>
-            <param name="draw-curves" type="boolean" _gui-text="Draw curves:">true</param>
+            <param name="draw-curves" type="boolean" _gui-text="Draw preview/debugging vectors">true</param>
 		</page>
 
         <page name='tab' _gui-text='Preferences'>
             <param name="filename" type="string" _gui-text="File name: ">output.gcode</param>
             <param name="directory" type="string" _gui-text="Directory: "></param>
             <_param name="help" type="description">(blank is your desktop)</_param>
-            <param name="feed" type="int" min="0" max="9000" _gui-text="Cutting feed rate (mm/min):">1000</param>
-			<param name="movefeed" type="int" min="0" max="29000" _gui-text="Movement feed rate (mm/min):">5000</param>
-			<param name="bitmapfeed" type="int" min="0" max="9000" _gui-text="Bitmap feed rate (mm/min):">1000</param>
+            <param name="feed" type="int" min="10" max="9000" _gui-text="Cutting feed rate (mm/min):">300</param>
+			<param name="bitmapfeed" type="int" min="10" max="9000" _gui-text="Engrave feed rate (mm/min):">1000</param>
 			<param name="dovector" type="boolean" _gui-text="Laser cut vectors">true</param>
-			<param name="dobitmap" type="boolean" _gui-text="Laser draw bitmaps">true</param>
+			<param name="dobitmap" type="boolean" _gui-text="Laser engrave bitmaps">true</param>
         </page>
     </param>    
 </inkscape-extension>
